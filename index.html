@@ -7,20 +7,19 @@
     justify-content: center; 
     align-items: center; 
     height: 100vh; 
-    background-color: #000000; /* Pure black background so the white text pops */
-    color: #ffffff; /* Pure white text */
-    /* Modern, sleek font stack identical to modern social media apps */
+    background-color: #000000; 
+    color: #ffffff; 
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
     margin: 0;
   }
   #counter { 
-    font-size: 15vw; 
-    font-weight: normal; /* Standard weight, no longer bold */
+    font-size: 10vw; /* Slightly smaller so "DAY 1095" fits on one line */
+    font-weight: normal; 
   }
 </style>
 </head>
 <body>
-  <div id="counter">1</div>
+  <div id="counter">DAY 1</div>
 
   <script>
     function animateValue(id, start, end, duration) {
@@ -29,7 +28,10 @@
         const step = (timestamp) => {
             if (!startTimestamp) startTimestamp = timestamp;
             const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-            obj.innerHTML = Math.floor(progress * (end - start) + start);
+            
+            // This is where "DAY " gets glued to the front of the number
+            obj.innerHTML = "DAY " + Math.floor(progress * (end - start) + start);
+            
             if (progress < 1) {
                 window.requestAnimationFrame(step);
             }
@@ -38,7 +40,7 @@
     }
     
     // Animates from 1 to 1095 over 5000 milliseconds (5 seconds)
-    animateValue("counter", 1, 1095, 20000);
+    animateValue("counter", 1, 1095, 5000);
   </script>
 </body>
 </html>
