@@ -7,12 +7,16 @@
     justify-content: center; 
     align-items: center; 
     height: 100vh; 
-    background-color: #121212; /* Dark background */
-    color: #00ffcc; /* Cool teal text color */
-    font-family: 'Arial', sans-serif; 
+    background-color: #000000; /* Pure black background so the white text pops */
+    color: #ffffff; /* Pure white text */
+    /* Modern, sleek font stack identical to modern social media apps */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
     margin: 0;
   }
-  #counter { font-size: 15vw; font-weight: bold; }
+  #counter { 
+    font-size: 15vw; 
+    font-weight: normal; /* Standard weight, no longer bold */
+  }
 </style>
 </head>
 <body>
@@ -34,7 +38,6 @@
     }
     
     // Animates from 1 to 1095 over 5000 milliseconds (5 seconds)
-    // You can change the '5000' to make it faster or slower!
     animateValue("counter", 1, 1095, 5000);
   </script>
 </body>
