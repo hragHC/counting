@@ -1,46 +1,120 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<style>
-  body { 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    height: 100vh; 
-    background-color: #000000; 
-    color: #ffffff; 
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-    margin: 0;
-  }
-  #counter { 
-    font-size: 10vw; /* Slightly smaller so "DAY 1095" fits on one line */
-    font-weight: normal; 
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Digital Timer</title>
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/digital-7-mono');
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #050000; /* Very dark, reddish black background */
+            margin: 0;
+            font-family: 'Digital-7 Mono', monospace;
+        }
+
+        .timer-container {
+            position: relative;
+            background-color: #0f0000;
+            padding: 40px 60px;
+            border-radius: 10px;
+            border: 2px solid #2a0000;
+            box-shadow: inset 0 0 40px #000000, 0 0 20px rgba(255, 0, 0, 0.1);
+        }
+
+        /* The glowing red text */
+        .timer-display {
+            display: flex;
+            gap: 40px;
+            font-size: 180px;
+            line-height: 1;
+            color: #ff2a2a;
+            text-shadow: 
+                0 0 10px rgba(255, 42, 42, 0.8),
+                0 0 20px rgba(255, 0, 0, 0.6),
+                0 0 40px rgba(179, 0, 0, 0.4);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Faint background '8's to simulate unlit segments */
+        .timer-background {
+            display: flex;
+            gap: 40px;
+            font-size: 180px;
+            line-height: 1;
+            color: #2b0000; 
+            position: absolute;
+            top: 40px;
+            left: 60px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .digit-group {
+            display: flex;
+            letter-spacing: 8px; /* Adds the slight gap between digits inside a pair */
+        }
+    </style>
 </head>
 <body>
-  <div id="counter">DAY 1</div>
 
-  <script>
-    function animateValue(id, start, end, duration) {
-        let obj = document.getElementById(id);
-        let startTimestamp = null;
-        const step = (timestamp) => {
-            if (!startTimestamp) startTimestamp = timestamp;
-            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-            
-            // This is where "DAY " gets glued to the front of the number
-            obj.innerHTML = "DAY " + Math.floor(progress * (end - start) + start);
-            
-            if (progress < 1) {
-                window.requestAnimationFrame(step);
+    <div class="timer-container">
+        <div class="timer-background">
+            <div class="digit-group">88</div>
+            <div class="digit-group">88</div>
+            <div class="digit-group">88</div>
+        </div>
+
+        <div class="timer-display" id="timer">
+            <div class="digit-group" id="min">05</div>
+            <div class="digit-group" id="sec">30</div>
+            <div class="digit-group" id="ms">00</div>
+        </div>
+    </div>
+
+    <script>
+        // Set duration for 5 minutes and 30 seconds
+        const durationInMilliseconds = (5 * 60 + 30) * 1000; 
+        const endTime = Date.now() + durationInMilliseconds;
+
+        const minEl = document.getElementById('min');
+        const secEl = document.getElementById('sec');
+        const msEl = document.getElementById('ms');
+
+        function updateTimer() {
+            const now = Date.now();
+            const remaining = endTime - now;
+
+            // Stop the timer at 00:00:00
+            if (remaining <= 0) {
+                minEl.textContent = "00";
+                secEl.textContent = "00";
+                msEl.textContent = "00";
+                return; 
             }
-        };
-        window.requestAnimationFrame(step);
-    }
-    
-    // Animates from 1 to 1095 over 5000 milliseconds (5 seconds)
-    animateValue("counter", 1, 1095, 15000);
-  </script>
+
+            // Calculate minutes, seconds, and centiseconds (hundredths of a second)
+            const minutes = Math.floor((remaining / (1000 * 60)) % 60);
+            const seconds = Math.floor((remaining / 1000) % 60);
+            const centiseconds = Math.floor((remaining % 1000) / 10);
+
+            // Update DOM with leading zeros for single digits
+            minEl.textContent = minutes.toString().padStart(2, '0');
+            secEl.textContent = seconds.toString().padStart(2, '0');
+            msEl.textContent = centiseconds.toString().padStart(2, '0');
+
+            // requestAnimationFrame runs the update loop smoothly aligned with screen refreshes
+            requestAnimationFrame(updateTimer);
+        }
+
+        // Start the timer loop
+        requestAnimationFrame(updateTimer);
+    </script>
+
 </body>
 </html>
